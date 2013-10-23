@@ -249,6 +249,23 @@ introJs().onbeforechange(function(targetElement) {
 
 -----
 
+###introJs.getCurStep()
+
+Given the current step.
+
+**Available since:** v0.5.0
+
+**Returns:**
+ - Number
+
+**Example:**
+```javascript
+var curstep = introJs().getCurStep();
+//curstep is 0 while the fisrt step
+````
+
+-----
+
 ###Attributes:
  - `data-intro`: The tooltip text of step
  - `data-step`: The number of step
@@ -266,7 +283,9 @@ introJs().onbeforechange(function(targetElement) {
  - `tooltipClass`: Adding CSS class to all tooltips
  - `exitOnEsc`: Exit introduction when pressing Escape button, `true` or `false`
  - `exitOnOverlayClick`: Exit introduction when clicking on overlay layer, `true` or `false`
- - `showStepNumbers`: Show steps number in the red circle or not, `true` of `false`
+ - `showStepNumbers`: Show steps number in the red circle or not, `true` or `false`
+ - `forbidPrevLabel`: Forbidden the Previous button for some special requirement, `true` or `false`. Default is `fasle`
+ - `markOnOverlay`: Write HTML on the Overlay
 
 See [setOption](https://github.com/usablica/intro.js/#introjssetoptionoption-value) to see an example.
 
