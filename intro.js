@@ -442,7 +442,6 @@
 
       //next button
       var nextTooltipButton = document.createElement('a');
-
       nextTooltipButton.onclick = function() {
         if(self._introItems.length - 1 != self._currentStep) {
           _nextStep.call(self);
@@ -456,7 +455,7 @@
       var prevTooltipButton = document.createElement('a');
 
       prevTooltipButton.onclick = function() {
-        if(self._currentStep != 0) {
+        if(self._currentStep != 0 && this._options.forbidPrevLabel) {//first step or forbidden PrevButton [mod by lfbear]
           _previousStep.call(self);
         }
       };
@@ -509,8 +508,18 @@
       skipTooltipButton.innerHTML = this._options.skipLabel;
     }
 
-    //Set focus on "next" button, so that hitting Enter always moves you onto the next step
-    nextTooltipButton.focus();
+    //forbidden PrevButton [mod by lfbear]
+    if(this._options.forbidPrevLabel){
+        prevTooltipButton.className += ' introjs-disabled';
+    }
+
+    //Set focus on "down" button while the last step [mod by lfbear]
+    if(this._introItems.length - 1 == this._currentStep){
+        skipTooltipButton.focus();//now, skip button turns done button
+    } else {
+        //Set focus on "next" button, so that hitting Enter always moves you onto the next step
+        nextTooltipButton.focus();
+    }
 
     //add target element position style
     targetElement.element.className += ' introjs-showElement';
@@ -639,15 +648,21 @@
       }
     }
 
-    targetElm.appendChild(overlayLayer);
+    var olElm = targetElm.appendChild(overlayLayer);
+    
+    //add html on overlay[mod by lfbear]
+    if(self._options.markOnOverlay){
+      olElm.innerHTML = self._options.markOnOverlay;
+    }
 
     overlayLayer.onclick = function() {
       if(self._options.exitOnOverlayClick == true) {
         _exitIntro.call(self, targetElm);
-      }
-      //check if any callback is defined
-      if (self._introExitCallback != undefined) {
-        self._introExitCallback.call(self);
+        //check if any callback is defined
+        //callback runs while exitOnOverlayClick is true [mod by lfbear]
+        if (self._introExitCallback != undefined) {
+          self._introExitCallback.call(self);
+        }
       }
     };
 
@@ -754,6 +769,9 @@
     goToStep: function(step) {
       _goToStep.call(this, step);
       return this;
+    },
+    getCurStep: function(){
+      return this._currentStep;
     },
     exit: function() {
       _exitIntro.call(this, this._targetElement);
